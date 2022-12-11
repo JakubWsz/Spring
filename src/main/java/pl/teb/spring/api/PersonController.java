@@ -18,7 +18,7 @@ private final PersonService personService;
             value = {
                     @ApiResponse(responseCode = "200")
             })
-   public Person createPerson(@RequestParam String firstname, String lastname, Integer age){
+   public Person createPerson(@RequestParam String firstname,@RequestParam String lastname,@RequestParam Integer age){
        return personService.create(firstname,lastname,age);
     }
 }
