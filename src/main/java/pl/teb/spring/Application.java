@@ -27,11 +27,18 @@ public class Application {
         Person person = new Person(faker.name().firstName(), faker.name().lastName(),
                 faker.number().numberBetween(17, 55));
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("firstname").descending());
+        Person jan = new Person("Jan", "Kowalski", 50);
+        Person jan2 = new Person("Jan", "Zalewski", 50);
         return args -> {
             personRepository.save(person);
+            personRepository.save(jan);
+            personRepository.save(jan2);
             personRepository.findById(1L).ifPresent(System.out::println);
             personRepository.saveAll(generatePersonList());
             Page<Person> page = personRepository.findAll(pageRequest);
+            System.out.println(personRepository.findPeopleByFirstnameAndAge("Jan", 50));
+            System.out.println(personRepository.findPersonByAgeGreaterThan(35));
+            System.out.println(personRepository.findPersonByLastnameStartingWith('S'));
         };
     }
 
