@@ -1,6 +1,6 @@
 package pl.teb.spring;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import pl.teb.spring.infrastructure.entity.Person;
-import pl.teb.spring.infrastructure.repository.PersonRepository;
+import pl.teb.spring.infrastructure.entity.Car;
+import pl.teb.spring.infrastructure.repository.CarRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 public class Application {
@@ -22,34 +23,26 @@ public class Application {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(PersonRepository personRepository) {
-        Faker faker = new Faker();
-        Person person = new Person(faker.name().firstName(), faker.name().lastName(),
-                faker.number().numberBetween(17, 55));
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("firstname").descending());
-        Person jan = new Person("Jan", "Kowalski", 50);
-        Person jan2 = new Person("Jan", "Zalewski", 50);
+    CommandLineRunner commandLineRunner(CarRepository carRepository) {
+        //zapisz listę do repozytorium
+        //pobierz spaginowaną listę samochodów z pojemnością slilnika mniejszą niż 3
+        //pobierz spaginowaną listę samochodów z pojemnością slilnika mniejszą większą niż 2 ale mniejszą niż 5 posortowaną maloejąco po modelu
+        //pobierz spaginowaną listę samochodów z modelem kończącym się na "a" posortowaną po marce i pojemności silnika
+        //pobierz spaginowaną listę samochodów z markami zaczynającymi się na litery w przedziale od "G" do "Z"
+        PageRequest exampleRequest = PageRequest.of(0, 10,Sort.by("example"));
         return args -> {
-            personRepository.save(person);
-            personRepository.save(jan);
-            personRepository.save(jan2);
-            personRepository.findById(1L).ifPresent(System.out::println);
-            personRepository.saveAll(generatePersonList());
-            Page<Person> page = personRepository.findAll(pageRequest);
-            System.out.println(personRepository.findPeopleByFirstnameAndAge("Jan", 50));
-            System.out.println(personRepository.findPersonByAgeGreaterThan(35));
-            System.out.println(personRepository.findPersonByLastnameStartingWith('S'));
+
         };
     }
 
-    private List<Person> generatePersonList() {
-        List<Person> personList = new ArrayList<>();
+    List<Car> generateCars() {
         Faker faker = new Faker();
-
+        Random r = new Random();
+        List<Car> cars = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            personList.add(new Person(faker.name().firstName(), faker.name().lastName(),
-                    faker.number().numberBetween(17, 55)));
+            cars.add(new Car(faker.vehicle().make(), faker.vehicle().model(),
+                    r.nextInt(7 - 1) + 1));
         }
-        return personList;
+        return cars;
     }
 }
