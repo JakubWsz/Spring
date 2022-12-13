@@ -1,41 +1,45 @@
 package pl.teb.spring.infrastructure.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Entity
+@Entity(name = "Person")
+@Table(name = "person")
 public class Person {
     @Id
     @SequenceGenerator(
-            name = "person_sequence",
-            sequenceName = "person_sequence",
+            name = "person_id_sequence",
+            sequenceName = "person_id_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "person_sequence"
+            generator = "person_id_sequence"
     )
     private Long id;
     private String firstname;
     private String lastname;
     private Integer age;
+    private String uuid;
 
-    public Person(String firstname, String lastname, Integer age) {
+    public Person() {}
+
+    public Person(String firstname, String lastname, Integer age, String uuid) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
-    }
-
-    public Person() {
-
+        this.uuid = uuid;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public String getFirstname() {
