@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum AppExceptionCode {
-    NO_SUCH_PERSON("There is no such person with passed ID", 400);
+    NO_SUCH_PERSON("There is no such person with passed ID", 400),
+    PERSON_DELETED("Person already deleted", 400);
 
     private final String message;
     private final int status;
