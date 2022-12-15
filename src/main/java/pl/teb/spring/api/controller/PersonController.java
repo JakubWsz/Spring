@@ -18,6 +18,7 @@ import pl.teb.spring.api.exception.AppExceptionHandler;
 import pl.teb.spring.domain.PersonService;
 import pl.teb.spring.infrastructure.entity.Person;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class PersonController {
                     @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation =
                             AppExceptionHandler.Error.class)))
             })
-    public ResponseEntity<PersonResponse> createPerson(@RequestBody PersonRequest personRequest) {
+    public ResponseEntity<PersonResponse> createPerson(@Valid @RequestBody PersonRequest personRequest) {
         Person person = personService.create(personRequest.getFirstname(),
                 personRequest.getLastname(), personRequest.getAge());
         return ResponseEntity.ok(Objects.requireNonNull(conversionService.convert(person, PersonResponse.class)));
